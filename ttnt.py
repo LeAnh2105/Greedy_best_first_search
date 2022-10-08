@@ -159,15 +159,6 @@ def reconstruct_path(came_from, current):
     return final_path
 
 
-
-  #Tính khoảng cách giữ 2 tọa độ
-def manhattan_distance(node, goal):
-    x1, y1 = node
-    x2, y2 = goal
-
-    return ((x2-x1)**2 + (y2-y1)**2)**0.5
-
-
 def heuristic_reedy_best_first_search(node, goal):
     x1, y1 = node
     x2, y2 = goal
