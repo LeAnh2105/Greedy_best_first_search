@@ -149,49 +149,6 @@ def get_node(val):
  
     return "key doesn't exist"
 
-def BFS(graph, start, end):
-    queue = []
-    visited=[]
-    queue.append([start])
-    while queue:
-        path = queue.pop(0)
-        
-        visited.append(path)
-        
-        node = path[-1]
-        
-        #print(node)
-        
-        if node == end:
-            return path
-        elif node not in visited:
-            for adj in graph.get(node, []):
-                new_path = list(path)
-                new_path.append(adj)
-                queue.append(new_path)
-            visited.append(node)
-            
-
-def DFS(graph, start, end):
-    stack = []
-    visited=[]
-    stack.append([start])
-    while stack:
-        path = stack.pop()
-        
-        visited.append(path)
-        
-        node = path[-1]
-        
-        
-        if node == end:
-            return path
-        elif node not in visited:
-            for adj in graph.get(node, []):
-                new_path = list(path)
-                new_path.append(adj)
-                stack.append(new_path)
-            visited.append(node)
 
 
 def reconstruct_path(came_from, current):
@@ -210,66 +167,13 @@ def manhattan_distance(node, goal):
 
     return ((x2-x1)**2 + (y2-y1)**2)**0.5
 
-def heuristic(node, goal):
-    x1, y1 = node
-    x2, y2 = goal
-    return ((x2-x1)**2 + (y2-y1)**2)**0.5
+
 def heuristic_reedy_best_first_search(node, goal):
     x1, y1 = node
     x2, y2 = goal
     return abs(x1 - x2) + abs(y1 - y2)
 
-def a_star_search(graph, start, goal):
-    closed_set = []  # nodes already evaluated
 
-    open_set = [start]  # nodes discovered but not yet evaluated
-
-    came_from = {}  # most efficient path to reach from
-
-    gscore = {}  # cost to get to that node from start
-
-    for key in nodes:
-        gscore[key] = 100  # intialize cost for every node to inf
-
-    gscore[start] = 0
-
-    fscore = {}  # chi phi đến đích từ 1 đỉnh
-
-    for key in nodes:
-        fscore[key] = 100
-
-    fscore[start] = heuristic(start, goal)  # Tính chi phí của đỉnh bắt đầu đến đích
-
-    while open_set:
-        min_val = 1000  # Tìm đỉnh trong tập mở có fscore nhỏ nhất
-        for node in open_set:
-            if fscore[node] < min_val:
-                min_val = fscore[node]
-                min_node = node
-
-        current = min_node  # set that node to current
-        if current == goal:
-           return reconstruct_path(came_from, current)
-        open_set.remove(current)  # remove node from set to be evaluated and
-        closed_set.append(current)  # add it to set of evaluated nodes
-
-        for neighbor in graph.get(nodes_dict[current], []): # check neighbors of current node
-            Next=get_node(neighbor)
-            if Next in closed_set:  # ignore neighbor node if its already evaluated
-                continue
-            if Next not in open_set:  # else add it to set of nodes to be evaluated
-                open_set.append(Next)
-
-            # dist from start to neighbor through current
-            tentative_gscore = gscore[current] + 1
-            
-            # not a better path to reach neighbor
-            if tentative_gscore >= gscore[Next]:
-                continue
-            came_from[Next] = current  # record the best path untill now
-            gscore[Next] = tentative_gscore
-            fscore[Next] = gscore[Next] + heuristic(Next, goal)
-            
 def greedy_best_first_search(graph, start, goal):
     closed_set = []  # đỉnh đã được đánh giá
 
@@ -315,20 +219,3 @@ path=greedy_best_first_search(graph, start, end)
 print(path)
 visualize_maze(matrix,bonus_points,start,end,path)
 
-path=a_star_search(graph, start, end)
-print(path)
-visualize_maze(matrix,bonus_points,start,end,path)
-
-'''
-path=DFS(graph, nodes_dict.get(start), nodes_dict.get(end))
-route=[]
-for n in path:
-    route.append(get_node(n))
-print(route)
-visualize_maze(matrix,bonus_points,start,end,route)
-    
-    
-path=a_star_search(graph, start, end)
-print(path)
-visualize_maze(matrix,bonus_points,start,end,path)
-'''
